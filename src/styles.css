@@ -44,7 +44,7 @@ button {
   max-width: 640px;
   margin: 0 auto;
   min-height: 100%;
-  padding: 0 0 5rem;
+  padding: 0 0 calc(5rem + env(safe-area-inset-bottom));
 }
 
 /* --- Top bar --- */
@@ -52,7 +52,7 @@ button {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 1.5rem 1.25rem 1rem;
+  padding: calc(1.25rem + env(safe-area-inset-top)) 1.25rem 1rem;
   border-bottom: 1px solid var(--line);
 }
 
@@ -354,34 +354,39 @@ input[type="file"] { display: none; }
 }
 
 .food-slot-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
 }
 
-.food-slot-tag {
+.food-slot-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--ink-muted);
-  width: 3.2rem;
-  flex-shrink: 0;
+  margin-bottom: 0.3rem;
 }
 
 .chip-group {
   display: flex;
-  gap: 0.3rem;
-  flex-wrap: wrap;
+  gap: 0.35rem;
+  flex-wrap: nowrap;
 }
 
 .chip {
+  flex: 1 1 0;
+  min-width: 0;
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: 999px;
-  padding: 0.3rem 0.65rem;
+  padding: 0.4rem 0.2rem;
   color: var(--ink-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chip.selected {
@@ -394,7 +399,6 @@ input[type="file"] { display: none; }
 .match-indicator {
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  margin-left: 0.2rem;
 }
 
 .match-indicator.match { color: var(--pine); }

@@ -259,7 +259,7 @@ export function FoodCard({ data, onSave }) {
         <div key={slot.key} className="food-slot">
           <div className="food-slot-label">{slot.label}</div>
           <div className="food-slot-row">
-            <span className="food-slot-tag">Plan</span>
+            <div className="food-slot-caption"><span>Plan</span></div>
             <ChipGroup
               value={slots[slot.key]?.plan}
               onChange={(v) => setSlotValue(slot.key, 'plan', v)}
@@ -267,13 +267,15 @@ export function FoodCard({ data, onSave }) {
             />
           </div>
           <div className="food-slot-row">
-            <span className="food-slot-tag">Actual</span>
+            <div className="food-slot-caption">
+              <span>Actual</span>
+              {matchIndicator(slots[slot.key]?.plan, slots[slot.key]?.actual)}
+            </div>
             <ChipGroup
               value={slots[slot.key]?.actual}
               onChange={(v) => setSlotValue(slot.key, 'actual', v)}
               options={slot.key === 'fasting' ? FASTING_OPTIONS : SIZE_OPTIONS}
             />
-            {matchIndicator(slots[slot.key]?.plan, slots[slot.key]?.actual)}
           </div>
         </div>
       ))}
