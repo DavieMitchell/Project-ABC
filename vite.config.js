@@ -2,22 +2,25 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// Change base to '/your-repo-name/' when deploying to GitHub Pages,
-// same as you did for My Gers.
+// Matches your GitHub repo name exactly: DavieMitchell/Project-ABC
 export default defineConfig({
-  base: '/project-abc/',
+  base: '/Project-ABC/',
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['apple-touch-icon.png'],
       manifest: {
         name: 'Project ABC',
         short_name: 'Project ABC',
-        start_url: '/project-abc/',
         display: 'standalone',
         background_color: '#121212',
         theme_color: '#1DB954',
-        icons: []
+        icons: [
+          { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+        ]
       }
     })
   ]
