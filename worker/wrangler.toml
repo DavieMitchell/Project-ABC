@@ -1,0 +1,6 @@
+name = "project-abc-api"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# Your ANTHROPIC_API_KEY is NOT set here (never put secrets in this file).
+# It's set separately as an encrypted secret — see README.md.

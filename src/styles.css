@@ -1,0 +1,433 @@
+/* Project ABC — visual identity: dark, Spotify-inspired.
+   Palette: near-black background, white ink, green primary accent.
+   All type is sans-serif (Inter), numbers in a mono face for alignment. */
+
+:root {
+  --paper: #121212;
+  --paper-raised: #1E1E1E;
+  --card-hover: #282828;
+  --ink: #FFFFFF;
+  --ink-muted: #B3B3B3;
+  --line: #2A2A2A;
+  --pine: #1DB954;
+  --pine-soft: #0F3324;
+  --ochre: #FFC542;
+  --ochre-soft: #3A2F14;
+  --clay: #FF7A59;
+  --clay-soft: #3A2018;
+
+  --font-display: 'Inter', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.app-shell {
+  max-width: 640px;
+  margin: 0 auto;
+  min-height: 100%;
+  padding: 0 0 5rem;
+}
+
+/* --- Top bar --- */
+.top-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 1.5rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.top-bar h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.top-bar .tools {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-raised);
+}
+
+.icon-btn:hover { border-color: var(--pine); color: var(--pine); }
+
+/* --- Calendar / ledger grid --- */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.25rem 0.5rem;
+}
+
+.calendar-header .month-label {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.calendar-header button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--ink-muted);
+  padding: 0.25rem 0.6rem;
+}
+
+.weekday-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  padding: 0 1.25rem 1.25rem;
+}
+
+.day-cell {
+  aspect-ratio: 1;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 6px;
+  position: relative;
+}
+
+.day-cell.empty { background: transparent; border: none; }
+
+.day-cell.is-today {
+  border-color: var(--pine);
+  box-shadow: inset 0 0 0 1px var(--pine);
+}
+
+.day-cell .day-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink);
+}
+
+.day-cell.is-today .day-num { color: var(--pine); font-weight: 600; }
+
+.day-cell .dots {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.dot.weight, .cat-dot.weight { background: var(--pine); }
+.dot.meds, .cat-dot.meds { background: var(--clay); }
+.dot.food, .cat-dot.food { background: var(--ochre); }
+.dot.activity, .cat-dot.activity { background: #4CC9F0; }
+.dot.checkin, .cat-dot.checkin { background: #B983FF; }
+.dot.binge, .cat-dot.binge { background: #E5484D; }
+
+/* --- Day view --- */
+.day-view-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.day-view-header .back {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  background: none;
+  border: none;
+  padding: 0 0 0.6rem;
+}
+
+.day-view-header .date-display {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.card-stack {
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.entry-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.entry-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.entry-card-header .label-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.entry-card-header .cat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.entry-card-header .title {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.entry-card-header .summary {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.entry-card-header .chevron {
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+}
+
+.entry-card-body {
+  padding: 0 1rem 1rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.9rem;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.field-row label {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.field-row input, .field-row select, .field-row textarea {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.4rem 0.55rem;
+  background: var(--paper);
+  color: var(--ink);
+  width: 55%;
+}
+
+.field-row textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  min-height: 2.6rem;
+  resize: none;
+  overflow: hidden;
+}
+
+.save-hint {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+/* --- Settings / import-export panel --- */
+.panel {
+  padding: 1.25rem;
+}
+
+.panel h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin-top: 0;
+}
+
+.panel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-row .desc {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin-top: 0.2rem;
+}
+
+.btn-primary {
+  background: var(--pine);
+  color: #04160D;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+input[type="file"] { display: none; }
+
+/* --- Food slots (plan/actual chip rows) --- */
+.food-slot {
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.food-slot:first-child {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.food-slot-label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  margin-bottom: 0.4rem;
+}
+
+.food-slot-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.food-slot-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  width: 3.2rem;
+  flex-shrink: 0;
+}
+
+.chip-group {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  color: var(--ink-muted);
+}
+
+.chip.selected {
+  background: var(--pine);
+  border-color: var(--pine);
+  color: #04160D;
+  font-weight: 600;
+}
+
+.match-indicator {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-left: 0.2rem;
+}
+
+.match-indicator.match { color: var(--pine); }
+.match-indicator.over { color: var(--ochre); }
+.match-indicator.under { color: var(--clay); }
+
+/* --- Binary toggle switch (Sugar / Binge fields) --- */
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem 0.25rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.toggle-switch .toggle-knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink-muted);
+  transition: background 0.15s ease;
+}
+
+.toggle-switch.on {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.toggle-switch.on .toggle-knob {
+  background: var(--clay);
+}
