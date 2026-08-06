@@ -33,8 +33,8 @@ export default function HomeStats({ refreshTrigger }) {
   if (!eligible.length) return null
 
   const stats = [
-    { title: 'All time', days: eligible },
-    { title: 'Last 7 days', days: last7 }
+    { title: 'All', days: eligible },
+    { title: '7 days', days: last7 }
   ]
 
   return (
@@ -49,12 +49,12 @@ export default function HomeStats({ refreshTrigger }) {
             ) : (
               <>
                 <div className="home-stats-row">
-                  <span>Calories</span>
-                  <span>{average(s.days, 'calories')} kcal</span>
+                  <span>Cals</span>
+                  <span>{average(s.days, 'calories')}</span>
                 </div>
                 <div className="home-stats-row">
-                  <span>Protein</span>
-                  <span>{average(s.days, 'protein')} g</span>
+                  <span>Prot</span>
+                  <span>{average(s.days, 'protein')}</span>
                 </div>
               </>
             )}

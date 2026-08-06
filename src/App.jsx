@@ -16,6 +16,7 @@ export default function App() {
   const [selectedKey, setSelectedKey] = useState(null)
   const [selectedDay, setSelectedDay] = useState(null)
   const [dayIndex, setDayIndex] = useState({}) // dateKey -> [logged sections]
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const refreshIndex = useCallback(async () => {
     const days = await getAllDays()
@@ -61,6 +62,11 @@ export default function App() {
 
   const goToDay = (delta) => openDay(addDays(selectedKey, delta))
 
+  const goTo = (nextView) => {
+    setView(nextView)
+    setMenuOpen(false)
+  }
+
   return (
     <div className="app-shell">
       <div className="top-bar">
@@ -69,17 +75,24 @@ export default function App() {
           <div className="top-bar-subtitle">The place to track your health</div>
         </div>
         <div className="tools">
-          {view !== 'settings' && (
-            <button className="icon-btn" onClick={() => setView('settings')}>Data</button>
-          )}
-          {view !== 'report' && (
-            <button className="icon-btn" onClick={() => setView('report')}>Report</button>
-          )}
           {view === 'day' && (
             <button className="icon-btn" onClick={() => openDay(todayKey())}>Today</button>
           )}
+          <button className="menu-btn" onClick={() => setMenuOpen(true)} aria-label="Menu">
+            <span /><span /><span />
+          </button>
         </div>
       </div>
+
+      {menuOpen && (
+        <div className="menu-overlay" onClick={() => setMenuOpen(false)}>
+          <div className="menu-panel" onClick={(e) => e.stopPropagation()}>
+            <button className="menu-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">&times;</button>
+            <button className="menu-item" onClick={() => goTo('settings')}>Data</button>
+            <button className="menu-item" onClick={() => goTo('report')}>Report</button>
+          </div>
+        </div>
+      )}
 
       {view === 'calendar' && (
         <>
