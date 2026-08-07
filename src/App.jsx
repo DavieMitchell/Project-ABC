@@ -72,7 +72,7 @@ export default function App() {
       <div className="top-bar">
         <div className="top-bar-title">
           <h1>Project ABC</h1>
-          <div className="top-bar-subtitle">The place to track your health</div>
+          <div className="top-bar-subtitle">The place to track your food</div>
         </div>
         <div className="tools">
           {view === 'day' && (
