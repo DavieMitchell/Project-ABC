@@ -1,8 +1,19 @@
 // Talks only to your own Worker URL — never to Anthropic directly.
 // Set this once you've deployed the worker (see /worker/README.md).
-// Trailing slash(es) are stripped so it doesn't matter how the URL was
-// pasted into the GitHub secret — "…workers.dev" and "…workers.dev/" both work.
-export const WORKER_URL = (import.meta.env.VITE_WORKER_URL || '').replace(/\/+$/, '')
+// Two defensive normalisations, since this value is pasted by hand into a
+// GitHub secret and both mistakes have happened before:
+// - trailing slash(es) are stripped ("…workers.dev/" -> "…workers.dev")
+// - a missing "https://" scheme is added back ("project-abc-api...workers.dev"
+//   would otherwise be treated as a path on the app's own site, not Cloudflare)
+function normalizeWorkerUrl(raw) {
+  let url = (raw || '').trim().replace(/\/+$/, '')
+  if (url && !/^https?:\/\//i.test(url)) {
+    url = `https://${url}`
+  }
+  return url
+}
+
+export const WORKER_URL = normalizeWorkerUrl(import.meta.env.VITE_WORKER_URL)
 
 // input: { text: string, images: [{ data: base64String, mediaType: "image/jpeg" }, ...] }
 // Either can be empty, but not both. If images are present, text is treated

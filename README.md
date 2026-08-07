@@ -4,7 +4,7 @@ A single-purpose food diary: log meals by photo or text, get AI-estimated
 macros back, see accumulated totals per day, and pull reports over any date
 range. Everything else (weight, meds, activity, mood) has been deliberately
 cut — those live in other apps now (Shotsy, Nike Run/Hal). This app does one
-thing.  
+thing.
 
 ## What's built
 
