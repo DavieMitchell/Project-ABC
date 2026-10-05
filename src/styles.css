@@ -55,10 +55,14 @@ button {
 .top-bar-title h1 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.75rem;
+  font-size: min(3.5rem, calc((100vw - 104px) / 6));
+  line-height: 1.1;
+  white-space: nowrap;
   margin: 0;
   letter-spacing: 0.01em;
 }
+
+.top-bar-title { min-width: 0; flex: 1; }
 
 .top-bar-subtitle {
   font-size: 0.92rem;
@@ -68,7 +72,7 @@ button {
 
 .top-bar {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
 }
@@ -310,9 +314,6 @@ button {
   padding: 1rem 1.25rem 1.25rem;
   border-bottom: 1px solid var(--line);
   background: var(--paper);
-  position: sticky;
-  top: var(--topbar-h, 0px);
-  z-index: 10;
 }
 
 .day-view-header .back {
@@ -323,8 +324,14 @@ button {
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
-  margin-bottom: 1rem;
   display: inline-block;
+}
+
+.day-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .date-nav {

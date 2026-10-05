@@ -38,7 +38,7 @@ const cleanMeasurements = (m) => {
   return Object.keys(out).length ? out : null
 }
 
-export default function DayView({ dateKey, day, onBack, onSaveSection, onClearDay, onPrevDay, onNextDay }) {
+export default function DayView({ dateKey, day, onBack, onSaveSection, onClearDay, onPrevDay, onNextDay, onToday }) {
   const [exporting, setExporting] = useState(false)
   const entries = day.food?.entries ?? emptyEntries()
   const totals = computeTotals(entries)
@@ -69,7 +69,10 @@ export default function DayView({ dateKey, day, onBack, onSaveSection, onClearDa
   return (
     <div>
       <div className="day-view-header">
-        <button className="back" onClick={onBack}>&#8592; Home</button>
+        <div className="day-header-top">
+          <button className="back" onClick={onBack}>&#8592; Home</button>
+          <button className="back" onClick={onToday}>Today</button>
+        </div>
         <div className="date-nav">
           <button className="date-nav-arrow" onClick={onPrevDay} aria-label="Previous day">&#8249;</button>
           <div className="date-display">{formatUKWeekdayLong(dateKey)}</div>

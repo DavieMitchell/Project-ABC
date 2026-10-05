@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Calendar from './components/Calendar'
 import DayView from './components/DayView'
 import Settings from './components/Settings'
@@ -18,18 +18,7 @@ export default function App() {
   const [selectedDay, setSelectedDay] = useState(null)
   const [dayIndex, setDayIndex] = useState({}) // dateKey -> [logged sections]
   const [menuOpen, setMenuOpen] = useState(false)
-  const topBarRef = useRef(null)
 
-  // Publish the sticky top bar's height so the day header can stick beneath it.
-  useEffect(() => {
-    const el = topBarRef.current
-    if (!el) return
-    const set = () => document.documentElement.style.setProperty('--topbar-h', `${el.offsetHeight}px`)
-    set()
-    const ro = new ResizeObserver(set)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
 
   const refreshIndex = useCallback(async () => {
     const days = await getAllDays()
@@ -82,15 +71,11 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <div className="top-bar" ref={topBarRef}>
+      <div className="top-bar">
         <div className="top-bar-title">
           <h1>Project ABC</h1>
-          <div className="top-bar-subtitle">The place to track your food</div>
         </div>
         <div className="tools">
-          {view === 'day' && (
-            <button className="icon-btn" onClick={() => openDay(todayKey())}>Today</button>
-          )}
           <button className="menu-btn" onClick={() => setMenuOpen(true)} aria-label="Menu">
             <span /><span /><span />
           </button>
@@ -131,6 +116,7 @@ export default function App() {
           onClearDay={clearDay}
           onPrevDay={() => goToDay(-1)}
           onNextDay={() => goToDay(1)}
+          onToday={() => openDay(todayKey())}
         />
       )}
 
