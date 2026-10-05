@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import Calendar from './components/Calendar'
 import DayView from './components/DayView'
 import Settings from './components/Settings'
 import Report from './components/Report'
+import Measurements from './components/Measurements'
 import HomeStats from './components/HomeStats'
 import { hasFoodLogged } from './components/Cards'
 import { getAllDays, getDay, saveDaySection, deleteDaySection } from './utils/db'
@@ -10,13 +11,25 @@ import { todayKey, addDays, fromDateKey } from './utils/date'
 
 export default function App() {
   const today = new Date()
-  const [view, setView] = useState('calendar') // 'calendar' | 'day' | 'settings' | 'report'
+  const [view, setView] = useState('calendar') // 'calendar' | 'day' | 'settings' | 'report' | 'measurements'
   const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
   const [selectedKey, setSelectedKey] = useState(null)
   const [selectedDay, setSelectedDay] = useState(null)
   const [dayIndex, setDayIndex] = useState({}) // dateKey -> [logged sections]
   const [menuOpen, setMenuOpen] = useState(false)
+  const topBarRef = useRef(null)
+
+  // Publish the sticky top bar's height so the day header can stick beneath it.
+  useEffect(() => {
+    const el = topBarRef.current
+    if (!el) return
+    const set = () => document.documentElement.style.setProperty('--topbar-h', `${el.offsetHeight}px`)
+    set()
+    const ro = new ResizeObserver(set)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   const refreshIndex = useCallback(async () => {
     const days = await getAllDays()
@@ -48,9 +61,9 @@ export default function App() {
     setYear(y)
   }
 
-  const saveSection = async (section, data) => {
-    const updated = await saveDaySection(selectedKey, section, data)
-    setSelectedDay(updated)
+  const saveSection = async (section, data, key = selectedKey) => {
+    const updated = await saveDaySection(key, section, data)
+    if (key === selectedKey) setSelectedDay(updated)
     refreshIndex()
   }
 
@@ -69,7 +82,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <div className="top-bar">
+      <div className="top-bar" ref={topBarRef}>
         <div className="top-bar-title">
           <h1>Project ABC</h1>
           <div className="top-bar-subtitle">The place to track your food</div>
@@ -90,6 +103,7 @@ export default function App() {
             <button className="menu-close" onClick={() => setMenuOpen(false)} aria-label="Close menu">&times;</button>
             <button className="menu-item" onClick={() => goTo('settings')}>Data</button>
             <button className="menu-item" onClick={() => goTo('report')}>Report</button>
+            <button className="menu-item" onClick={() => goTo('measurements')}>Measurements</button>
           </div>
         </div>
       )}
@@ -109,6 +123,7 @@ export default function App() {
 
       {view === 'day' && selectedDay && (
         <DayView
+          key={selectedKey}
           dateKey={selectedKey}
           day={selectedDay}
           onBack={() => setView('calendar')}
@@ -121,6 +136,10 @@ export default function App() {
 
       {view === 'settings' && (
         <Settings onBack={() => setView('calendar')} onDataChanged={refreshIndex} />
+      )}
+
+      {view === 'measurements' && (
+        <Measurements onBack={() => setView('calendar')} />
       )}
 
       {view === 'report' && (

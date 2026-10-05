@@ -29,20 +29,27 @@ export async function getDay(dateKey) {
   return (await db.get(STORE, dateKey)) || { dateKey }
 }
 
+// Atomic read-modify-write in one transaction, so concurrent autosaves of
+// different sections can never overwrite each other. data == null removes
+// the section.
 export async function saveDaySection(dateKey, section, data) {
   const db = await getDB()
-  const existing = (await db.get(STORE, dateKey)) || { dateKey }
-  const updated = { ...existing, [section]: data }
-  await db.put(STORE, updated)
+  const tx = db.transaction(STORE, 'readwrite')
+  const existing = (await tx.store.get(dateKey)) || { dateKey }
+  let updated
+  if (data == null) {
+    const { [section]: _drop, ...rest } = existing
+    updated = rest
+  } else {
+    updated = { ...existing, [section]: data }
+  }
+  await tx.store.put(updated)
+  await tx.done
   return updated
 }
 
 export async function deleteDaySection(dateKey, section) {
-  const db = await getDB()
-  const existing = (await db.get(STORE, dateKey)) || { dateKey }
-  const { [section]: _drop, ...rest } = existing
-  await db.put(STORE, rest)
-  return rest
+  return saveDaySection(dateKey, section, null)
 }
 
 export async function getAllDays() {

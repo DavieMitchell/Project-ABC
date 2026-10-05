@@ -311,7 +311,7 @@ button {
   border-bottom: 1px solid var(--line);
   background: var(--paper);
   position: sticky;
-  top: env(safe-area-inset-top);
+  top: var(--topbar-h, 0px);
   z-index: 10;
 }
 
@@ -884,15 +884,15 @@ input[type="file"] { display: none; }
   padding: 2rem;
 }
 
-.print-sheet .report-sheet-title { font-size: 1.5rem; }
-.print-sheet .report-sheet-range { font-size: 1rem; margin-bottom: 1.4rem; }
-.print-sheet .report-logged-note { font-size: 0.95rem; margin-bottom: 1.4rem; }
-.print-sheet .report-averages { gap: 1rem; margin-bottom: 2rem; }
-.print-sheet .report-average-cell { padding: 1.1rem 0.6rem; min-height: 6rem; }
-.print-sheet .report-average-value { font-size: 1.9rem; }
-.print-sheet .report-average-label { font-size: 0.85rem; }
-.print-sheet .report-chart-block { margin-bottom: 1.8rem; }
-.print-sheet .report-chart-title { font-size: 1.1rem; margin-bottom: 0.6rem; }
+.print-sheet .report-sheet-title , .pdf-sheet .report-sheet-title { font-size: 1.5rem; }
+.print-sheet .report-sheet-range , .pdf-sheet .report-sheet-range { font-size: 1rem; margin-bottom: 1.4rem; }
+.print-sheet .report-logged-note , .pdf-sheet .report-logged-note { font-size: 0.95rem; margin-bottom: 1.4rem; }
+.print-sheet .report-averages , .pdf-sheet .report-averages { gap: 1rem; margin-bottom: 2rem; }
+.print-sheet .report-average-cell , .pdf-sheet .report-average-cell { padding: 1.1rem 0.6rem; min-height: 6rem; }
+.print-sheet .report-average-value , .pdf-sheet .report-average-value { font-size: 1.9rem; }
+.print-sheet .report-average-label , .pdf-sheet .report-average-label { font-size: 0.85rem; }
+.print-sheet .report-chart-block , .pdf-sheet .report-chart-block { margin-bottom: 1.8rem; }
+.print-sheet .report-chart-title , .pdf-sheet .report-chart-title { font-size: 1.1rem; margin-bottom: 0.6rem; }
 
 /* --- Day export: per-meal entry listing --- */
 .day-print-meal {
@@ -939,3 +939,148 @@ input[type="file"] { display: none; }
   font-style: italic;
   padding: 1rem 0;
 }
+
+/* --- Journal & Measurements (day view) --- */
+.cat-dot.journal { background: #497B98; }
+.cat-dot.measurements { background: #9A9A9E; }
+
+.card-summary {
+  padding: 0 1rem 0.85rem;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+.card-summary.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-line;
+}
+
+.journal-text {
+  width: 100%;
+  min-height: 9rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  background: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+}
+.journal-text:focus, .measure-inputs input:focus { outline: none; border-color: var(--accent); }
+
+.journal-hint {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+  margin-top: 0.5rem;
+}
+
+.measure-field { padding: 0.7rem 0; border-bottom: 1px solid var(--line); }
+.measure-field:first-child { padding-top: 0; }
+.measure-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.measure-label { font-weight: 600; font-size: 0.92rem; }
+.measure-inputs { display: flex; align-items: center; gap: 0.5rem; }
+.measure-inputs input {
+  width: 5.2rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: right;
+}
+.measure-unit { font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-muted); }
+.measure-equiv { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted); margin-top: 0.4rem; white-space: pre-wrap; }
+
+.unit-toggle { display: inline-flex; gap: 0.25rem; }
+.unit-chip {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+}
+.unit-chip.active { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+
+/* --- Measurements page --- */
+.measure-section { padding: 0.9rem 0; border-top: 1px solid #E0E0E0; }
+.measure-section.excluded .report-chart-block,
+.measure-section.excluded .measure-summary,
+.measure-section.excluded .measure-table { opacity: 0.45; }
+.measure-section-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.measure-section-head .report-chart-title { margin-bottom: 0; }
+.measure-unit-row { margin: 0.4rem 0 0.5rem; }
+.measure-unit-row .unit-chip { background: #F5F5F5; border-color: #D8D8D8; color: #5A5A5A; }
+.measure-unit-row .unit-chip.active { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+.measure-empty { font-size: 0.82rem; font-style: italic; color: #5A5A5A; padding: 0.4rem 0; }
+
+.include-toggle { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+.include-toggle input { position: absolute; opacity: 0; width: 0; height: 0; display: block; }
+.include-switch {
+  width: 2.2rem; height: 1.3rem; border-radius: 999px; background: #C9C9C9;
+  position: relative; transition: background 0.15s; flex-shrink: 0;
+}
+.include-switch::after {
+  content: ''; position: absolute; top: 2px; left: 2px; width: calc(1.3rem - 4px); height: calc(1.3rem - 4px);
+  border-radius: 50%; background: #FFFFFF; transition: transform 0.15s;
+}
+.include-toggle input:checked + .include-switch { background: var(--accent); }
+.include-toggle input:checked + .include-switch::after { transform: translateX(0.9rem); }
+.include-toggle input:focus-visible + .include-switch { outline: 2px solid var(--accent); outline-offset: 2px; }
+.include-label { font-size: 0.72rem; color: #5A5A5A; font-family: var(--font-mono); }
+
+.measure-summary, .measure-print-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.8rem;
+}
+.measure-print-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 0; }
+.measure-print-value { font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; line-height: 1.2; color: #497B98; }
+.pdf-sheet .measure-print-value { font-size: 1.15rem; }
+.measure-summary .report-average-cell { min-height: 3.4rem; }
+
+.measure-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; color: #1A1A1A; }
+.measure-table th { text-align: left; font-size: 0.7rem; color: #5A5A5A; font-weight: 600; padding: 0.3rem 0.4rem; border-bottom: 1px solid #D8D8D8; }
+.measure-table td { padding: 0.35rem 0.4rem; border-bottom: 1px solid #EFEFEF; font-family: var(--font-mono); }
+.pdf-sheet .measure-table { font-size: 1rem; }
+.pdf-sheet .measure-table th { font-size: 0.85rem; }
+.pdf-sheet .measure-table td { padding: 0.5rem 0.6rem; }
+
+/* --- Multi-page PDF sheets --- */
+.pdf-sheet { background: #FFFFFF; color: #1A1A1A; }
+.pdf-sheet .pdf-block { background: #FFFFFF; }
+.pdf-sheet .report-sheet-title { font-size: 1.5rem; }
+.pdf-section-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  border-bottom: 2px solid #497B98;
+  padding: 0.6rem 0 0.3rem;
+}
+.journal-print {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #1A1A1A;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 0.15rem 0;
+}
+.pdf-sheet .day-print-meal-title { font-size: 1.15rem; margin: 0.4rem 0 0; }
+.pdf-sheet .day-print-entry { padding: 0.5rem 0; }
